@@ -1,0 +1,3 @@
+- O usuário informará o nome ao entrar na aplicação
+- O usuário informará o id(ou nome?) do usuário ao qual quer enviar mensagem
+- Ao informar o id de um usuário valido, o sistema criará uma sala de conversa
