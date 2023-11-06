@@ -1,0 +1,13 @@
+Supabase | 
+
+:: Broadcast X Presença
+É recomendado utilizar, sempre que possível, o BROADCAST. 
+Presença utiliza um 'in-memory conflict free replicated data type' (CRDT) para traquear 
+e sincronizar as alterações de maneira eventual e consistente. Se você usar Presença, é melhor limitar suas alterações para enviar atualizações com menos frequência.
+
+
+:: Postgres changes
+A extensão de alterações do postgres escuta as alterações no banco de dados e as envia 
+aos clientes.
+
+Clients can choose to receive INSERT, UPDATE, DELETE, or * (all) changes for all changes in a schema, a table in a schema, or a column's value in a table. Your clients should only listen to tables in the public schema and you must first enable the tables you want your clients to listen to.

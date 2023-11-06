@@ -6,11 +6,8 @@ function App() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
 
-  const handleReceiveMessage = (payload: any) => {
-    const t = [...messages, payload.payload.message];
-    console.log(t);
-
-    setMessages(t);
+  const handleReceiveMessage = (event: any) => {
+    setMessages([...messages, event.payload.message]);
   };
 
   const channel = client.channel("chat");
@@ -18,31 +15,49 @@ function App() {
     .on("broadcast", { event: "message" }, handleReceiveMessage)
     .subscribe();
 
-  useEffect(() => {}, []);
+  // useEffect(() => {
+  //   const channel = client.channel("chat");
+  //   channel
+  //     .on("broadcast", { event: "message" }, handleReceiveMessage)
+  //     .subscribe();
 
-  const handleSendMessage = () => {
+  //   () => {
+  //     return channel.unsubscribe();
+  //   };
+  // }, []);
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+
     if (!message) return;
 
-    channel.send({
-      type: "broadcast",
-      event: "message",
-      payload: { message: message },
-    });
+    try {
+      channel.send({
+        type: "broadcast",
+        event: "message",
+        payload: { message: message },
+      });
+      setMessages((prev) => [...prev, message]);
+      setMessage("");
+    } catch (error) {}
   };
 
   return (
     <div className="container">
       <div className="messages">
-        {messages.map((i: string) => {
-          return <div>{i}</div>;
+        {messages.map((message: string, i) => {
+          return <div key={i}>{message}</div>;
         })}
       </div>
-      <input
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        type="text"
-      />
-      <button onClick={handleSendMessage}>Enviar</button>
+      <form onSubmit={handleSendMessage}>
+        <input
+          name={"message"}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          type="text"
+        />
+        <input type="submit" onClick={handleSendMessage} />
+      </form>
     </div>
   );
 }
