@@ -5,26 +5,36 @@ import { client } from "./services/supabase.ts";
 function App() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
+  const USER_ID = 1;
 
   const handleReceiveMessage = (event: any) => {
-    setMessages([...messages, event.payload.message]);
+    const message = event.new;
+    setMessages([...messages, message.content]);
   };
+
+  const handleChats = (event: any) => {
+    debugger;
+    const message = event.new;
+    setMessages([...messages, message.content]);
+  };
+
+  useEffect(() => {
+    console.log(messages);
+  }, [messages]);
 
   const channel = client.channel("chat");
   channel
-    .on("broadcast", { event: "message" }, handleReceiveMessage)
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "messages",
+        // filter: `author_id=eq.${USER_ID}`,
+      },
+      handleReceiveMessage
+    )
     .subscribe();
-
-  // useEffect(() => {
-  //   const channel = client.channel("chat");
-  //   channel
-  //     .on("broadcast", { event: "message" }, handleReceiveMessage)
-  //     .subscribe();
-
-  //   () => {
-  //     return channel.unsubscribe();
-  //   };
-  // }, []);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
