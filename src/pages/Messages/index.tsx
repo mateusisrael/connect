@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { client } from "../../services/supabase";
+import * as S from "./styles";
+import SideMenu from "../../components/SideMenu";
 
 function Messages() {
   const [message, setMessage] = useState("");
@@ -51,23 +53,36 @@ function Messages() {
     } catch (error) {}
   };
 
+  const chats = [
+    { name: "Silvia", img: "" },
+    { name: "André", img: "" },
+    { name: "Filipe", img: "" },
+    { name: "Marina", img: "" },
+  ];
+
   return (
-    <div className="container">
-      <div className="messages">
-        {messages.map((message: string, i) => {
-          return <div key={i}>{message}</div>;
-        })}
+    <S.Container>
+      <SideMenu chats={chats}></SideMenu>
+      <div style={{ position: "relative", width: "100%", margin: "0 24px" }}>
+        <div className="messages">
+          {messages.map((message: string, i) => {
+            return <div key={i}>{message}</div>;
+          })}
+        </div>
+        <form
+          style={{ position: "absolute", bottom: "0" }}
+          onSubmit={handleSendMessage}
+        >
+          <input
+            name={"message"}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            type="text"
+          />
+          <input type="submit" onClick={handleSendMessage} />
+        </form>
       </div>
-      <form onSubmit={handleSendMessage}>
-        <input
-          name={"message"}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          type="text"
-        />
-        <input type="submit" onClick={handleSendMessage} />
-      </form>
-    </div>
+    </S.Container>
   );
 }
 

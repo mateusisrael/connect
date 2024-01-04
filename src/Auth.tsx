@@ -22,7 +22,13 @@ function AuthProvider({ children }) {
   }, []);
 
   if (!session) {
-    return <Auth supabaseClient={client} appearance={{ theme: ThemeSupa }} />;
+    return (
+      <Auth
+        providers={[]}
+        supabaseClient={client}
+        appearance={{ theme: ThemeSupa }}
+      />
+    );
   } else {
     return children;
   }
