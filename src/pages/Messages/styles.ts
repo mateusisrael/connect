@@ -8,3 +8,7 @@ export const Container = styled.div`
   box-sizing: border-box;
   min-height: 100vh;
 `
+
+export const MessageInput = styled.input`
+  min-width: 200px;
+`
