@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { client } from "../../services/supabase";
 import * as S from "./styles";
 import SideMenu from "../../components/SideMenu";
-import { supabase } from "@supabase/auth-ui-shared";
+
 
 function Messages() {
   const channel = client.channel("chat");
@@ -31,10 +31,10 @@ function Messages() {
 
   useEffect(() => {
     const getChats = async () => {
-      if(user) {
+      if(user?.identities[0]?.id) {
       try {
 
-          const userId = user?.identities[0]?.id
+          const userId = user.identities[0].id
           let chats = []
     
           await client.from('chats').select('*').eq('owner_id', userId)
@@ -46,7 +46,7 @@ function Messages() {
 
 
           })
-    
+
           await client.from('chats').select('*').eq('participant_id', userId)
           .then(res => {
             console.log('chats', res)
@@ -67,7 +67,7 @@ function Messages() {
     }
 
     getChats()
-  }, [user]);
+  }, [user?.identities[0]?.id]);
 
   const handleReceiveMessage = (event: any) => {
     const message = event.new;
@@ -117,23 +117,24 @@ function Messages() {
     <S.Container>
       <SideMenu userId={user?.id} chats={chats}></SideMenu>
       <div style={{ position: "relative", width: "100%", margin: "0 24px" }}>
-        <div>Olá {}</div>
+        <div style={{ width: '100%', backgroundColor: 'teal', padding: '5px', color: '#fff'}}>Olá {}</div>
         <div className="messages">
           {messages.map((message: string, i) => {
             return <div key={i}>{message}</div>;
           })}
         </div>
         <form
-          style={{ position: "absolute", bottom: "0" }}
+          style={{ display: 'grid', gridTemplateColumns: '4fr 1fr' ,position: "absolute", bottom: "0", width: '100%' }}
           onSubmit={handleSendMessage}
         >
           <S.MessageInput
             name={"message"}
             value={message}
+            style={{ padding: '5px', border: '1px solid silver'}}
             onChange={(e) => setMessage(e.target.value)}
             type="text"
           />
-          <input type="submit" onClick={handleSendMessage} />
+          <input style={{ cursor: 'pointer'}}  type="submit" onClick={handleSendMessage} />
         </form>
       </div>
     </S.Container>

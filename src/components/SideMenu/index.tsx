@@ -4,13 +4,15 @@ import { Card, Avatar, WrapItem, Flex } from "@chakra-ui/react";
 // import profile from "../../../public/profile.png";
 
 function SideMenu({ userId, chats }) {
+  console.log(chats)
   return (
     <S.Container>
       <h1>Conversas</h1>
       <div>
-        {chats.map((contact) => {
+        {chats.map((contact, i) => {
           return (
             <Flex
+              key={i}
               margin={"14px 0"}
               gap={"14px"}
               flexDirection={"row"}

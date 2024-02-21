@@ -12,6 +12,7 @@
 - Resetar Senha
   Ao clicar no botão de reset de senha - enviado por email - o usuário loga direto (o reset está como magic link)
 
+- [DONE] Concertar renderização dos chats
 -> Buscar mensagens vinculadas ao chat selecionado
 
 - Enviar mensagem
@@ -21,3 +22,8 @@
 - Ativar RLS da tabela chats
 
 - Receber mensagem
+
+OBS EMAILS: 
+  mateusisrael@1sti.com.br
+  mateuss.i.fernandes@gmail.com
+  senha para as duas contas: code37
