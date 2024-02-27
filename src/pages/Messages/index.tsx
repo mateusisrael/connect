@@ -17,12 +17,16 @@ function Messages() {
       try {
         let user = await client.auth.getUser()
         const userId = user.data.user.id
-        console.log('USER', user.data.user.id)
+        console.log('USER', user.data)
         let res = await client.from('users').select('*').eq('id', userId)
 
-        console.log('res users', res)
+        const userWithName = {
+          ...user.data.user,
+          name: res?.data[0].name
+        }
+        console.log('res users', userWithName)
 
-        setUser(user?.data?.user)
+        setUser(userWithName)
       } catch (error) {}
     }
     
@@ -80,7 +84,16 @@ function Messages() {
     setMessages([...messages, message.content]);
   };
 
+  useEffect(() => {
+    console.log({messages})
+  }, [messages])
 
+  const handleGetMessages = (chat) => {
+    client.from('messages').select('*').eq('chat_id', chat.id)
+      .then(res => {
+        setMessages(res.data)
+      })
+  }
 
   
   channel
@@ -115,12 +128,12 @@ function Messages() {
 
   return (
     <S.Container>
-      <SideMenu userId={user?.id} chats={chats}></SideMenu>
+      <SideMenu userId={user?.id} onSelectChat={handleGetMessages} chats={chats}></SideMenu>
       <div style={{ position: "relative", width: "100%", margin: "0 24px" }}>
-        <div style={{ width: '100%', backgroundColor: 'teal', padding: '5px', color: '#fff'}}>Olá {}</div>
+        <div style={{ width: '100%', backgroundColor: 'teal', padding: '5px', color: '#fff'}}>Olá {user?.name}</div>
         <div className="messages">
-          {messages.map((message: string, i) => {
-            return <div key={i}>{message}</div>;
+          {messages.map((message, i) => {
+            return <div key={i}>{message.content}</div>;
           })}
         </div>
         <form

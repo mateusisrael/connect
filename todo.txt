@@ -13,15 +13,33 @@
   Ao clicar no botão de reset de senha - enviado por email - o usuário loga direto (o reset está como magic link)
 
 - [DONE] Concertar renderização dos chats
--> Buscar mensagens vinculadas ao chat selecionado
+- [DONE] Buscar mensagens vinculadas ao chat selecionado
 
-- Enviar mensagem
+-> Enviar mensagem
   Hoje, ao clicar no botão 'enviar', a aplicação faz o broadcast, porém não há nenhuma configuração para verificar o que é enviado por broadcast.
   É preciso salvar a mensagem na tabela 'messages'
 
-- Ativar RLS da tabela chats
-
 - Receber mensagem
+
+- Usar api de notificações do browser para notificar mensagem recebida (Mobile e desktop)
+
+- Ativar RLS das tabelas
+
+- Não fazer o get das mensagens quando clicar novamente no contato que já esteja selecionado
+
+- Criar Handoff da aplicação
+
+- Tipar
+
+- Organizar a arquitetura da aplicação se baseando em Clean Architecture
+
+- Escrever testes Unitários
+
+- (Talvez) usar cypress para testes de integração
+
+- [Feature] Envio de arquivos
+
+- [Feature] Envio de mensagnes de voz
 
 OBS EMAILS: 
   mateusisrael@1sti.com.br
