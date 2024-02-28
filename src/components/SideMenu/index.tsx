@@ -7,7 +7,7 @@ function SideMenu({ userId, chats, onSelectChat }) {
   console.log(chats)
   return (
     <S.Container>
-      <h1>Conversas</h1>
+      <h1 style={{ marginLeft: '8px' }}>Conversas</h1>
       <div>
         {chats.map((chat, i) => {
           return (

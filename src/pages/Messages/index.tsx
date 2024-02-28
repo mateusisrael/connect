@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { client } from "../../services/supabase";
 import * as S from "./styles";
 import SideMenu from "../../components/SideMenu";
+import { ArrowBackIcon } from "@chakra-ui/icons"
+import { Icon, IconButton } from '@chakra-ui/react'
+import { supabase } from "@supabase/auth-ui-shared";
 
 
 function Messages() {
@@ -9,6 +12,8 @@ function Messages() {
   const [user, setUser] = useState<unknown>(undefined)
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
+  const [chatId, setChatId] = useState(undefined)
+  const [messagesInFocus, setMessagesInFocus] = useState(false);
   // const [chats, setChats] = useState([{ name: "André", img: "" }])
   const [chats, setChats] = useState([])
 
@@ -32,6 +37,10 @@ function Messages() {
     
     fetchUserData()
   }, []);
+
+  useEffect(() => {
+    console.log('mensagens: ', messages)
+  }, [messages])
 
   useEffect(() => {
     const getChats = async () => {
@@ -75,7 +84,10 @@ function Messages() {
 
   const handleReceiveMessage = (event: any) => {
     const message = event.new;
-    setMessages([...messages, message.content]);
+    console.log('handleReceiveMessage: ', message)
+    setMessages(prevState => (
+      [...prevState, message]
+    ))
   };
 
   const handleChats = (event: any) => {
@@ -84,9 +96,11 @@ function Messages() {
     setMessages([...messages, message.content]);
   };
 
-  useEffect(() => {
-    console.log({messages})
-  }, [messages])
+  const handleSelectChat = (chat) => {
+    setMessagesInFocus(true)
+    setChatId(chat.id)
+    handleGetMessages(chat)
+  }
 
   const handleGetMessages = (chat) => {
     client.from('messages').select('*').eq('chat_id', chat.id)
@@ -109,47 +123,87 @@ function Messages() {
     )
     .subscribe();
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
 
-    if (!message) return;
+    if (!message || !chatId) return;
 
     try {
-      channel.send({
-        type: "broadcast",
-        event: "message",
-        payload: { message: message },
-      });
-      setMessages((prev) => [...prev, message]);
-      setMessage("");
-    } catch (error) {}
+      // channel.send({
+      //   type: "broadcast",
+      //   event: "message",
+      //   payload: { message: message },
+      // });
+      // setMessages((prev) => [...prev, message]);
+      // setMessage("");
+
+      const { data, error } = await client
+        .from('messages')
+        .insert([{
+          content: message,
+          chat_id: chatId,
+          writter_id: user?.id
+        }]).select()
+
+        setMessages(prevState => (
+          [
+            ...prevState,
+            data[0]
+          ]
+        ))
+
+        setMessage("");
+
+        console.log('Mensagem enviada: ', data)
+        if(error) {
+          console.log('Mensagem não enviada: ', error)
+        }
+    } catch (error) {
+      console.log('Mensagem não enviada: ', error)
+    }
   };
 
 
   return (
     <S.Container>
-      <SideMenu userId={user?.id} onSelectChat={handleGetMessages} chats={chats}></SideMenu>
-      <div style={{ position: "relative", width: "100%", margin: "0 24px" }}>
-        <div style={{ width: '100%', backgroundColor: 'teal', padding: '5px', color: '#fff'}}>Olá {user?.name}</div>
-        <div className="messages">
-          {messages.map((message, i) => {
-            return <div key={i}>{message.content}</div>;
-          })}
-        </div>
-        <form
-          style={{ display: 'grid', gridTemplateColumns: '4fr 1fr' ,position: "absolute", bottom: "0", width: '100%' }}
-          onSubmit={handleSendMessage}
-        >
-          <S.MessageInput
-            name={"message"}
-            value={message}
-            style={{ padding: '5px', border: '1px solid silver'}}
-            onChange={(e) => setMessage(e.target.value)}
-            type="text"
-          />
-          <input style={{ cursor: 'pointer'}}  type="submit" onClick={handleSendMessage} />
-        </form>
-      </div>
+      <S.Header style={{ width: '100%', backgroundColor: 'teal', color: '#fff'}}>
+        <IconButton
+          onClick={() => {
+            setMessagesInFocus(false)
+            setChatId(undefined)
+          }}
+          colorScheme='teal'
+          icon={<ArrowBackIcon/>}
+        />
+        <p>Olá {user?.name}</p>
+        </S.Header>
+      <S.Row>
+        {!messagesInFocus ? <SideMenu userId={user?.id} onSelectChat={handleSelectChat} chats={chats}></SideMenu> : null}
+        <S.Main margin={messagesInFocus ? '0' : '0 24px'} style={{ position: "relative", width: "100%" }}>
+          <div>
+            {messages.map((message, i) => {
+              return (
+                <S.MessageWrapper key={i} owner={message?.writter_id === user.id}>
+                  <S.Message >{message?.content}</S.Message>
+                </S.MessageWrapper>
+              )
+            })}
+            </div>
+          <form
+            style={{ display: 'grid', gridTemplateColumns: '4fr 1fr' ,position: "absolute", bottom: "0", width: '100%' }}
+            onSubmit={handleSendMessage}
+          >
+            <S.MessageInput
+              name={"message"}
+              value={message}
+              style={{ padding: '5px', border: '1px solid silver'}}
+              onChange={(e) => setMessage(e.target.value)}
+              type="text"
+            />
+            <input style={{ cursor: 'pointer'}}  type="submit" onClick={handleSendMessage} />
+          </form>
+        </S.Main>
+      </S.Row>
     </S.Container>
   );
 }
