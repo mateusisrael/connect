@@ -26,6 +26,9 @@
 
 - Adicionar usuário criado à tabela de users.
   - O supabase tem uma tabela própria pra cada usuário cadastrado na aplicação. A tabela é auth.users
+  [notas]: Talvez o ideal fosse adicionar um campo de 'username' na tela de cadastro de usuário, e ao se criar um usuário adicioná-lo na tabela de users, porém,
+            Como a tela de cadastro é a tela de uma lib, o melhor, nesse momento, é criar uma tela e verificar se o usuário logado tem 'username' e caso não haja,
+            mostrá-lo a tela de ADICIONAR NOME e FOTO DE USUÁRIO.
 
 - Feature: Adicionar contato para iniciar conversa
 
@@ -49,7 +52,7 @@
 
 - [Feature] Envio de arquivos
 
-- [Feature] Envio de mensagnes de voz
+- [Feature] Envio de mensagens de voz
 
 OBS EMAILS: 
   mateusisrael@1sti.com.br
