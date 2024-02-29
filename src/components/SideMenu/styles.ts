@@ -1,11 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.aside`
   height: auto;
   border: 1px solid gray;
   border-radius: 5px;
-
-  >h1 {
+  > h1 {
     margin: 24px 0;
     font-size: 1rem;
   }

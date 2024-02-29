@@ -1,10 +1,9 @@
-import { Message } from "../../Domain/Model/Message";
-import { ChatRepository } from "../../Domain/Repository/ChatRepository";
-
+import { Message } from '../../Domain/Model/Message'
+import { ChatRepository } from '../../Domain/Repository/ChatRepository'
 
 export class ChatRepositoryImplementation implements ChatRepository {
   dataSource: any
-  
+
   constructor(dataSource: any) {
     this.dataSource = dataSource
   }
@@ -17,10 +16,7 @@ export class ChatRepositoryImplementation implements ChatRepository {
   getChats = () => {
     // Seguindo essa arquitetura, o banco teria uma tabela de chats, e a query seria mais ou menos assim:
     // Select * from chat where ownerId || recipientId = userID
-
-    
     // Query do ChatGPT:
-
     // SELECT *
     // FROM Participants
     // WHERE user_id = :user_id
@@ -41,5 +37,4 @@ export class ChatRepositoryImplementation implements ChatRepository {
   getMessages = (chatId: string) => {
     return this.dataSource.getMessages(chatId)
   }
-
 }

@@ -1,8 +1,8 @@
-import { ChatRepository } from "../../Repository/ChatRepository";
+import { ChatRepository } from '../../Repository/ChatRepository'
 
 export class GetMessagesUseCase {
   repository: ChatRepository
-  
+
   constructor(repository: ChatRepository) {
     this.repository = repository
   }

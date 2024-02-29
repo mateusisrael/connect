@@ -2,12 +2,8 @@
   - [DONE] Hoje é possível fazer login com uma conta já existente. Verificar se é possível criar conta direto pela aplicação
   - [RESOLVED][PROBLEMA] Ao tentar se cadastrar, o link não está sendo enviado para o email (O link é enviado apenas para emails que não estão cadastrados ainda)
 
-- Adicionar usuário criado à tabela de users.
-  - O supabase tem uma tabela própria pra cada usuário cadastrado na aplicação. A tabela é auth.users
-
-
-- [DONE][Ver se funcionou] Mudar tipo de dado do owner_id e participant_id
-- [DONE]Buscar chats do usuário logado
+- [DONE] Mudar tipo de dado do owner_id e participant_id
+- [DONE] Buscar chats do usuário logado
 
 - Resetar Senha
   Ao clicar no botão de reset de senha - enviado por email - o usuário loga direto (o reset está como magic link)
@@ -15,11 +11,25 @@
 - [DONE] Concertar renderização dos chats
 - [DONE] Buscar mensagens vinculadas ao chat selecionado
 
--> Enviar mensagem
+- [DONE] Separar (visualmente) mensagens enviadas e recebidas
+
+- [DONE] Enviar mensagem
   Hoje, ao clicar no botão 'enviar', a aplicação faz o broadcast, porém não há nenhuma configuração para verificar o que é enviado por broadcast.
   É preciso salvar a mensagem na tabela 'messages'
 
-- Receber mensagem
+- [DONE] Receber mensagem
+
+- [DONE] Configurar Prettier e Eslint
+- Ajustar auto fix do prettier nos arquivos de styles.ts
+
+- [DONE] Botão: Logout do usuário
+
+- Adicionar usuário criado à tabela de users.
+  - O supabase tem uma tabela própria pra cada usuário cadastrado na aplicação. A tabela é auth.users
+
+- Feature: Adicionar contato para iniciar conversa
+
+- Feature: Configuração de perfil. Permitir adicionar foto.
 
 - Usar api de notificações do browser para notificar mensagem recebida (Mobile e desktop)
 

@@ -1,5 +1,5 @@
-import { Message } from "../../Model/Message";
-import { ChatRepository } from "../../Repository/ChatRepository";
+import { Message } from '../../Model/Message'
+import { ChatRepository } from '../../Repository/ChatRepository'
 
 export class SendMessageUseCase {
   repository: ChatRepository
