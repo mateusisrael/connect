@@ -3,7 +3,15 @@ import { client } from '../../services/supabase'
 import * as S from './styles'
 import SideMenu from '../../components/SideMenu'
 import { ArrowBackIcon } from '@chakra-ui/icons'
-import { Button, IconButton } from '@chakra-ui/react'
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Button,
+  IconButton,
+} from '@chakra-ui/react'
+import SetUserInfos from '../../components/SetUserInfos'
 
 function Messages() {
   const channel = client.channel('chat')
@@ -12,17 +20,19 @@ function Messages() {
   const [messages, setMessages] = useState<string[]>([])
   const [chatId, setChatId] = useState(undefined)
   const [messagesInFocus, setMessagesInFocus] = useState(false)
+  const [userConfigModal, setUserConfigModal] = useState(false)
+  const [successSetUserName, setSuccessSetUserName] = useState(false)
   // const [chats, setChats] = useState([{ name: "André", img: "" }])
   const [chats, setChats] = useState([])
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        let user = await client.auth.getUser()
-        const userId = user.data.user.id
-        console.log('USER', user.data)
-        let res = await client.from('users').select('*').eq('id', userId)
+  const fetchUserData = async () => {
+    try {
+      let user = await client.auth.getUser()
+      const userId = user.data.user.id
+      console.log('USER', user.data)
+      let res = await client.from('users').select('*').eq('id', userId)
 
+      if (res?.data?.length) {
         const userWithName = {
           ...user.data.user,
           name: res?.data[0].name,
@@ -30,9 +40,12 @@ function Messages() {
         console.log('res users', userWithName)
 
         setUser(userWithName)
-      } catch (error) {}
-    }
-
+      } else {
+        setUserConfigModal(true)
+      }
+    } catch (error) {}
+  }
+  useEffect(() => {
     fetchUserData()
   }, [])
 
@@ -79,7 +92,6 @@ function Messages() {
   }
 
   const handleChats = (event: any) => {
-    debugger
     const message = event.new
     setMessages([...messages, message.content])
   }
@@ -147,75 +159,108 @@ function Messages() {
     client.auth.signOut()
   }
 
+  const handleSuccessSetName = () => {
+    setUserConfigModal(false)
+    setSuccessSetUserName(true)
+    fetchUserData()
+    setTimeout(() => {
+      setSuccessSetUserName(false)
+    }, 3000)
+  }
+
   return (
-    <S.Container>
-      <S.Header
-        style={{ width: '100%', backgroundColor: 'teal', color: '#fff' }}
-      >
-        <div>
-          <IconButton
-            onClick={() => {
-              setMessages([])
-              setMessagesInFocus(false)
-              setChatId(undefined)
-            }}
-            colorScheme='teal'
-            icon={<ArrowBackIcon />}
-          />
-          <p>Olá {user?.name}</p>
-        </div>
-        <Button onClick={handleLogout}>Sair</Button>
-      </S.Header>
-      <S.Row>
-        {!messagesInFocus ? (
-          <SideMenu
-            userId={user?.id}
-            onSelectChat={handleSelectChat}
-            chats={chats}
-          ></SideMenu>
-        ) : null}
-        <S.Main
-          margin={messagesInFocus ? '0' : '0 0 0 24px'}
-          style={{ position: 'relative', width: '100%' }}
-        >
-          <div className='messages-overflow'>
-            {messages.map((message, i) => {
-              return (
-                <S.MessageWrapper
-                  key={i}
-                  owner={message?.writter_id === user.id}
-                >
-                  <S.Message className='message'>{message?.content}</S.Message>
-                </S.MessageWrapper>
-              )
-            })}
-          </div>
-          <form
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '4fr 1fr',
-              position: 'absolute',
-              bottom: '0',
-              width: '100%',
-            }}
-            onSubmit={handleSendMessage}
-          >
-            <S.MessageInput
-              name={'message'}
-              value={message}
-              style={{ padding: '5px', border: '1px solid silver' }}
-              onChange={(e) => setMessage(e.target.value)}
-              type='text'
-            />
-            <input
-              style={{ cursor: 'pointer' }}
-              type='submit'
-              onClick={handleSendMessage}
-            />
-          </form>
-        </S.Main>
-      </S.Row>
-    </S.Container>
+    <>
+      {userConfigModal ? (
+        <SetUserInfos
+          onSuccessSetName={handleSuccessSetName}
+          userId={user?.id}
+        />
+      ) : (
+        <S.Container>
+          {successSetUserName ? (
+            <div style={{ zIndex: '20' }}>
+              <Alert variant='left-accent' status='success'>
+                <AlertIcon />
+                <AlertTitle>Sucesso!</AlertTitle>
+                <AlertDescription>
+                  Seu nome de usuário foi definido!
+                </AlertDescription>
+              </Alert>
+            </div>
+          ) : (
+            <S.Header
+              style={{ width: '100%', backgroundColor: 'teal', color: '#fff' }}
+            >
+              <div>
+                <IconButton
+                  onClick={() => {
+                    setMessages([])
+                    setMessagesInFocus(false)
+                    setChatId(undefined)
+                  }}
+                  colorScheme='teal'
+                  icon={<ArrowBackIcon />}
+                />
+                <p>Olá {user?.name}</p>
+              </div>
+              <Button onClick={handleLogout}>Sair</Button>
+            </S.Header>
+          )}
+
+          <S.Row>
+            {!messagesInFocus ? (
+              <SideMenu
+                userId={user?.id}
+                onSelectChat={handleSelectChat}
+                chats={chats}
+              ></SideMenu>
+            ) : null}
+            <S.Main
+              margin={messagesInFocus ? '0' : '0 0 0 24px'}
+              style={{ position: 'relative', width: '100%' }}
+            >
+              <div className='messages-overflow'>
+                {messages.map((message, i) => {
+                  return (
+                    <S.MessageWrapper
+                      key={i}
+                      owner={message?.writter_id === user.id}
+                    >
+                      <S.Message className='message'>
+                        {message?.content}
+                      </S.Message>
+                    </S.MessageWrapper>
+                  )
+                })}
+              </div>
+              <form
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '4fr 1fr',
+                  position: 'absolute',
+                  bottom: '0',
+                  width: '100%',
+                }}
+                onSubmit={handleSendMessage}
+              >
+                <S.MessageInput
+                  name={'message'}
+                  value={message}
+                  style={{ padding: '5px', border: '1px solid silver' }}
+                  onChange={(e) => setMessage(e.target.value)}
+                  type='text'
+                />
+                <input
+                  style={{ cursor: 'pointer' }}
+                  type='submit'
+                  onClick={handleSendMessage}
+                />
+              </form>
+            </S.Main>
+          </S.Row>
+        </S.Container>
+      )}
+    </>
   )
 }
 
