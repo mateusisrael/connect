@@ -12,6 +12,7 @@ import {
   IconButton,
 } from '@chakra-ui/react'
 import SetUserInfos from '../../components/SetUserInfos'
+import NewChatModal from '../../components/NewChatModal'
 
 function Messages() {
   const channel = client.channel('chat')
@@ -22,6 +23,7 @@ function Messages() {
   const [messagesInFocus, setMessagesInFocus] = useState(false)
   const [userConfigModal, setUserConfigModal] = useState(false)
   const [successSetUserName, setSuccessSetUserName] = useState(false)
+  const [newChatModal, setNewChatModal] = useState(false)
   // const [chats, setChats] = useState([{ name: "André", img: "" }])
   const [chats, setChats] = useState([])
 
@@ -212,6 +214,7 @@ function Messages() {
               <SideMenu
                 userId={user?.id}
                 onSelectChat={handleSelectChat}
+                onSetNewChat={() => setNewChatModal(true)}
                 chats={chats}
               ></SideMenu>
             ) : null}
@@ -258,6 +261,13 @@ function Messages() {
               </form>
             </S.Main>
           </S.Row>
+          {newChatModal ? (
+            <NewChatModal
+              onClose={() => {
+                setNewChatModal(false)
+              }}
+            />
+          ) : null}
         </S.Container>
       )}
     </>

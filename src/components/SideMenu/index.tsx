@@ -1,11 +1,14 @@
 import * as S from './styles'
-import { Card, Avatar, WrapItem, Flex } from '@chakra-ui/react'
+import { Card, Avatar, WrapItem, Flex, Button } from '@chakra-ui/react'
 
-function SideMenu({ userId, chats, onSelectChat }) {
+function SideMenu({ userId, chats, onSelectChat, onSetNewChat }) {
   console.log(chats)
   return (
     <S.Container>
-      <h1 style={{ marginLeft: '8px' }}>Conversas</h1>
+      <div className='chats-header'>
+        <h1 style={{ fontSize: '1.5rem' }}>Conversas</h1>
+        <Button onClick={onSetNewChat}>+</Button>
+      </div>
       <div>
         {chats.map((chat, i) => {
           return (
