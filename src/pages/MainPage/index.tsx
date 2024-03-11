@@ -14,7 +14,7 @@ import {
 import SetUserInfos from '../../components/SetUserInfos'
 import NewChatModal from '../../components/NewChatModal'
 
-function Messages() {
+function MainPage() {
   const channel = client.channel('chat')
   const [user, setUser] = useState<unknown>(undefined)
   const [message, setMessage] = useState('')
@@ -274,4 +274,4 @@ function Messages() {
   )
 }
 
-export default Messages
+export default MainPage
