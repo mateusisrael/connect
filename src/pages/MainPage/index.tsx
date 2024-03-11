@@ -13,6 +13,8 @@ import {
 } from '@chakra-ui/react'
 import SetUserInfos from '../../components/SetUserInfos'
 import NewChatModal from '../../components/NewChatModal'
+import UserInfosCard from '../../components/UserInfosCard/indext'
+import ContactsList from '../../components/ContactsList'
 
 function MainPage() {
   const channel = client.channel('chat')
@@ -189,34 +191,14 @@ function MainPage() {
                 </AlertDescription>
               </Alert>
             </div>
-          ) : (
-            <S.Header
-              style={{ width: '100%', backgroundColor: 'teal', color: '#fff' }}
-            >
-              <div>
-                <IconButton
-                  onClick={() => {
-                    setMessages([])
-                    setMessagesInFocus(false)
-                    setChatId(undefined)
-                  }}
-                  colorScheme='teal'
-                  icon={<ArrowBackIcon />}
-                />
-                <p>Olá {user?.name}</p>
-              </div>
-              <Button onClick={handleLogout}>Sair</Button>
-            </S.Header>
-          )}
+          ) : null}
 
           <S.Row>
             {!messagesInFocus ? (
-              <SideMenu
-                userId={user?.id}
-                onSelectChat={handleSelectChat}
-                onSetNewChat={() => setNewChatModal(true)}
-                chats={chats}
-              ></SideMenu>
+              <SideMenu>
+                <UserInfosCard name={user?.name} />
+                <ContactsList />
+              </SideMenu>
             ) : null}
             <S.Main
               margin={messagesInFocus ? '0' : '0 0 0 24px'}

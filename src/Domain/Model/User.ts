@@ -1,7 +1,11 @@
-import { Chat } from './Chat'
-
 export interface User {
   id: string
   name: string
-  chats: Array<Chat>
+  contact: UserContact;
+  profilePhotoUrl?: string;
+}
+
+interface UserContact {
+  type: "email" | "phone";
+  value: string;
 }

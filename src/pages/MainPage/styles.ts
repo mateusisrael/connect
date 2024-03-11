@@ -16,24 +16,7 @@ export const Row = styled.div`
   display: flex;
   flex-direction: row;
   height: 100%;
-  padding: 100px 12px 12px 12px;
-`
-
-export const Header = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 24px 12px;
-  position: fixed;
-  z-index: 10;
-
-  div:first-child {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 12px;
-  }
+  padding: 12px;
 `
 
 export const Message = styled.div`
