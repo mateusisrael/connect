@@ -29,13 +29,14 @@ export const Message = styled.div`
 
 export const Main = styled.div`
   margin: ${({ margin }) => margin};
-
+  display: flex;
+  flex-direction: column;
   .messages-overflow {
-    height: 100%;
+    flex-grow: 1;
     overflow-y: auto;
-    padding-bottom: 60px;
-    padding-right: 12px;
+    padding: 12px 12px 60px 12px;
     background-color: var(--neutral-background);
+    border-radius: 8px;
   }
 `
 

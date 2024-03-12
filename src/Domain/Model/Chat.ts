@@ -1,8 +1,8 @@
-import { Message } from './Message'
-
 export interface Chat {
   id: string
-  ownerId: string
-  participantId: string
-  messages: Array<Message>
+  owner_id: string
+  owner_name: string
+  participant_id: string
+  participant_name: string
+  created_at: string
 }

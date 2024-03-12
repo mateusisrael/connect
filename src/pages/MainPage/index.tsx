@@ -15,13 +15,14 @@ import SetUserInfos from '../../components/SetUserInfos'
 import NewChatModal from '../../components/NewChatModal'
 import UserInfosCard from '../../components/UserInfosCard/indext'
 import ContactsList from '../../components/ContactsList'
+import { Chat } from '../../Domain/Model/Chat'
 
 function MainPage() {
   const channel = client.channel('chat')
   const [user, setUser] = useState<unknown>(undefined)
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState<string[]>([])
-  const [chatId, setChatId] = useState(undefined)
+  const [chat, setChat] = useState<Chat>()
   const [messagesInFocus, setMessagesInFocus] = useState(false)
   const [userConfigModal, setUserConfigModal] = useState(false)
   const [successSetUserName, setSuccessSetUserName] = useState(false)
@@ -100,13 +101,13 @@ function MainPage() {
     setMessages([...messages, message.content])
   }
 
-  const handleSelectChat = (chat) => {
-    setMessagesInFocus(true)
-    setChatId(chat.id)
+  const handleSelectChat = (chat: Chat) => {
+    if (window.innerWidth < 850) setMessagesInFocus(true)
+    setChat(chat)
     handleGetMessages(chat)
   }
 
-  const handleGetMessages = (chat) => {
+  const handleGetMessages = (chat: Chat) => {
     client
       .from('messages')
       .select('*')
@@ -132,7 +133,7 @@ function MainPage() {
   const handleSendMessage = async (e) => {
     e.preventDefault()
 
-    if (!message || !chatId) return
+    if (!message || !chat?.id) return
 
     try {
       const { data, error } = await client
@@ -140,7 +141,7 @@ function MainPage() {
         .insert([
           {
             content: message,
-            chat_id: chatId,
+            chat_id: chat?.id,
             writter_id: user?.id,
           },
         ])
@@ -197,13 +198,31 @@ function MainPage() {
             {!messagesInFocus ? (
               <SideMenu>
                 <UserInfosCard name={user?.name} />
-                <ContactsList />
+                <ContactsList
+                  onSelectChat={handleSelectChat}
+                  userId={user?.id}
+                  chats={chats}
+                />
               </SideMenu>
             ) : null}
             <S.Main
               margin={messagesInFocus ? '0' : '0 0 0 24px'}
               style={{ position: 'relative', width: '100%' }}
             >
+              {chat?.id ? (
+                <header>
+                  {messagesInFocus ? (
+                    <button onClick={() => setMessagesInFocus(false)}>
+                      {'<'}
+                    </button>
+                  ) : null}
+                  <p>
+                    {chat.owner_id === user?.id
+                      ? chat.participant_name
+                      : chat.owner_name}
+                  </p>
+                </header>
+              ) : null}
               <div className='messages-overflow'>
                 {messages.map((message, i) => {
                   return (

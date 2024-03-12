@@ -4,6 +4,10 @@ export const Container = styled.aside`
   height: auto;
   width: 700px;
 
+  @media screen and (max-width: 850px) {
+    width: 350px;
+  }
+
   border-radius: 5px;
   > h1 {
     margin: 24px 0;

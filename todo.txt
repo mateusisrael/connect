@@ -32,6 +32,8 @@
 
 - Feature: Adicionar contato para iniciar conversa
 
+- Feature: Excluir conversa
+
 - Feature: Configuração de perfil. Permitir adicionar foto.
 
 - Usar api de notificações do browser para notificar mensagem recebida (Mobile e desktop)
@@ -58,3 +60,6 @@ OBS EMAILS:
   mateusisrael@1sti.com.br
   mateuss.i.fernandes@gmail.com
   senha para as duas contas: code37
+
+  user@fake.com
+  code37

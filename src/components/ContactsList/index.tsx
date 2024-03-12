@@ -2,25 +2,19 @@ import * as S from './styles'
 import AddIcon from '../../assets/sinal-de-mais.svg?react'
 import GenericButton from '../GenericButton'
 import { ChatItem } from './ChatItem'
+import { Chat } from '../../Domain/Model/Chat'
 
 type ContactsListProps = {
-  chats?: Array<any>
+  chats?: Array<Chat>
+  userId?: string
+  onSelectChat: CallableFunction
 }
 
 const ContactsList: React.FunctionComponent<ContactsListProps> = ({
   chats,
+  userId,
+  onSelectChat,
 }) => {
-  chats = [
-    {
-      contactName: 'zugor',
-      lastMessage: 'hello my fried, como você está?',
-    },
-    {
-      contactName: 'zugor',
-      lastMessage:
-        'Viu o jogo ontem? Flamengo ganhou do Fluminense. Te avisei bobão',
-    },
-  ]
   return (
     <S.Container>
       <S.Header>
@@ -34,9 +28,15 @@ const ContactsList: React.FunctionComponent<ContactsListProps> = ({
       {!!chats?.length ? (
         <S.Body>
           {chats.map((chat) => {
+            console.log(chat)
             return (
               <ChatItem
-                contactName={chat.contactName}
+                onClick={() => onSelectChat(chat)}
+                contactName={
+                  chat.owner_id === userId
+                    ? chat.participant_name
+                    : chat.owner_name
+                }
                 contactPhotoURL={chat.contactPhotoURL}
                 lastMessage={chat.lastMessage}
               />

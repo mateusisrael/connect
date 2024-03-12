@@ -5,15 +5,17 @@ type ChatItemProps = {
   contactName: string
   contactPhotoURL?: string
   lastMessage: string
+  onClick: () => {}
 }
 
 export const ChatItem: React.FunctionComponent<ChatItemProps> = ({
   contactName,
   contactPhotoURL,
   lastMessage,
+  onClick,
 }) => {
   return (
-    <S.ChatItemContainer>
+    <S.ChatItemContainer onClick={onClick}>
       <S.ChatItemContent>
         <Avatar profilePhotoURL={contactPhotoURL} />
         <S.ChatItemTexts>
