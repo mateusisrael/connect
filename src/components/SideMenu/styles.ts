@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 export const Container = styled.aside`
-  padding: 8px;
   height: auto;
+  width: 700px;
 
   border-radius: 5px;
   > h1 {

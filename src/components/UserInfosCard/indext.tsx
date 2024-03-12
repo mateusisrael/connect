@@ -1,6 +1,6 @@
 import * as S from './styles'
-import SetaDireita from '../../../public/seta-direita.svg?react'
-import GenericButton from '../GenericButton'
+import SetaDireita from '../../assets/seta-direita.svg?react'
+import Avatar from '../Avatar'
 
 type UserInfosCardProps = {
   name: string
@@ -8,17 +8,17 @@ type UserInfosCardProps = {
   profilePhoto?: string
 }
 
-const UserInfosCard = ({
+const UserInfosCard: React.FunctionComponent<UserInfosCardProps> = ({
   name,
   userContact,
   profilePhoto,
-}: UserInfosCardProps) => {
+}) => {
   userContact = 'teste@fake.com'
 
   return (
-    <GenericButton>
+    <S.Button>
       <S.Container>
-        <S.ProfileImg profilePhotoURL={profilePhoto ?? undefined} />
+        <Avatar profilePhotoURL={profilePhoto} />
 
         <S.TextsColumn>
           <h1 className='name'>{name}</h1>
@@ -27,7 +27,7 @@ const UserInfosCard = ({
 
         <SetaDireita />
       </S.Container>
-    </GenericButton>
+    </S.Button>
   )
 }
 

@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import GenericButton from "../GenericButton";
 
 export const Container = styled.div`
   padding: 8px 12px;
@@ -50,4 +51,8 @@ export const TextsColumn = styled.div`
     font-size: 1rem;
     color: var(--neutral-disabled);
   }
+`
+
+export const Button = styled.button`
+  width: 100%;
 `

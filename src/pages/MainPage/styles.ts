@@ -35,6 +35,7 @@ export const Main = styled.div`
     overflow-y: auto;
     padding-bottom: 60px;
     padding-right: 12px;
+    background-color: var(--neutral-background);
   }
 `
 
