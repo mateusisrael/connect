@@ -199,7 +199,9 @@ function MainPage() {
               <SideMenu>
                 <UserInfosCard name={user?.name} />
                 {searchNewContact ? (
-                  <NewContactForm onSearch={() => console.log('search')} />
+                  <NewContactForm
+                    onClickClose={() => setSearchNewContact(false)}
+                  />
                 ) : (
                   <ContactsList
                     onSelectChat={handleSelectChat}
