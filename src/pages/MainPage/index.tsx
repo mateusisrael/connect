@@ -12,10 +12,10 @@ import {
   IconButton,
 } from '@chakra-ui/react'
 import SetUserInfos from '../../components/SetUserInfos'
-import NewChatModal from '../../components/NewChatModal'
 import UserInfosCard from '../../components/UserInfosCard/indext'
 import ContactsList from '../../components/ContactsList'
 import { Chat } from '../../Domain/Model/Chat'
+import NewContactForm from '../../components/NewContactForm'
 
 function MainPage() {
   const channel = client.channel('chat')
@@ -26,7 +26,7 @@ function MainPage() {
   const [messagesInFocus, setMessagesInFocus] = useState(false)
   const [userConfigModal, setUserConfigModal] = useState(false)
   const [successSetUserName, setSuccessSetUserName] = useState(false)
-  const [newChatModal, setNewChatModal] = useState(false)
+  const [searchNewContact, setSearchNewContact] = useState(false)
   // const [chats, setChats] = useState([{ name: "André", img: "" }])
   const [chats, setChats] = useState([])
 
@@ -198,11 +198,16 @@ function MainPage() {
             {!messagesInFocus ? (
               <SideMenu>
                 <UserInfosCard name={user?.name} />
-                <ContactsList
-                  onSelectChat={handleSelectChat}
-                  userId={user?.id}
-                  chats={chats}
-                />
+                {searchNewContact ? (
+                  <NewContactForm onSearch={() => console.log('search')} />
+                ) : (
+                  <ContactsList
+                    onSelectChat={handleSelectChat}
+                    onClickNewContact={() => setSearchNewContact(true)}
+                    userId={user?.id}
+                    chats={chats}
+                  />
+                )}
               </SideMenu>
             ) : null}
             <S.Main
@@ -262,13 +267,6 @@ function MainPage() {
               </form>
             </S.Main>
           </S.Row>
-          {newChatModal ? (
-            <NewChatModal
-              onClose={() => {
-                setNewChatModal(false)
-              }}
-            />
-          ) : null}
         </S.Container>
       )}
     </>

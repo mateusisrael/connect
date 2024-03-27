@@ -18,6 +18,8 @@
   --neutral-disabled: #ADB5BD;
   --neutral-line: #EDEDED;
   --neutral-background: #F7F7FC;
+  /* --brand-color: #002DE3; */
+  --brand-color-default: #166FF6;
 }
 
 a {

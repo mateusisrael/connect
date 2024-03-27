@@ -8,12 +8,14 @@ type ContactsListProps = {
   chats?: Array<Chat>
   userId?: string
   onSelectChat: CallableFunction
+  onClickNewContact: React.MouseEventHandler<HTMLButtonElement> | undefined
 }
 
 const ContactsList: React.FunctionComponent<ContactsListProps> = ({
   chats,
   userId,
   onSelectChat,
+  onClickNewContact,
 }) => {
   return (
     <S.Container>
@@ -21,7 +23,7 @@ const ContactsList: React.FunctionComponent<ContactsListProps> = ({
         <div className='title-wrapper'>
           <h1 className='title'>Contatos</h1>
         </div>
-        <GenericButton>
+        <GenericButton onClick={onClickNewContact}>
           <AddIcon />
         </GenericButton>
       </S.Header>
